@@ -1,4 +1,5 @@
 CODE REVIEW 1
+What does great process look like? https://github.com/makersacademy/skills-workshops/blob/master/process_review/observation_guidance.md
 
 Input | Output
 
