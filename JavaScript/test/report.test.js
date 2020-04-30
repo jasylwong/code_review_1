@@ -7,11 +7,11 @@ describe('report', () => {
     })
 
     test('two greens should return "Green: 2"', () => {
-      expect(report("Green, Green")).toEqual("Green: 2");
+      expect(report("Green, green")).toEqual("Green: 2");
     })
 
     test('three greens should return "Green: 3"', () => {
-      expect(report("Green, Green, Green")).toEqual("Green: 3");
+      expect(report("green, Green, Green")).toEqual("Green: 3");
     })
   })
 
@@ -22,11 +22,11 @@ describe('report', () => {
       })
   
       test('two Reds should return "Red: 2"', () => {
-        expect(report("Red, Red")).toEqual("Red: 2");
+        expect(report("Red, red")).toEqual("Red: 2");
       })
   
       test('three Reds should return "Red: 3"', () => {
-        expect(report("Red, Red, Red")).toEqual("Red: 3");
+        expect(report("Red, red, Red")).toEqual("Red: 3");
       })
     })
 
@@ -38,21 +38,21 @@ describe('report', () => {
       })
   
       test('two Ambers should return "Amber: 2"', () => {
-        expect(report("Amber, Amber")).toEqual("Amber: 2");
+        expect(report("amber, Amber")).toEqual("Amber: 2");
       })
   
       test('three Ambers should return "Amber: 3"', () => {
-        expect(report("Amber, Amber, Amber")).toEqual("Amber: 3");
+        expect(report("Amber, Amber, amber")).toEqual("Amber: 3");
       })
     })
 
   describe('combinations', () => {
     test('Green, Red', () => {
-      expect(report("Green, Red")).toEqual("Green: 1\nRed: 1");
+      expect(report("green, Red")).toEqual("Green: 1\nRed: 1");
     })
 
     test('Amber, Red, Green, Red', () => {
-      expect(report('Amber, Red, Green, Red')).toEqual("Green: 1\nAmber: 1\nRed: 2");
+      expect(report('Amber, red, Green, Red')).toEqual("Green: 1\nAmber: 1\nRed: 2");
     })
   })
 })
