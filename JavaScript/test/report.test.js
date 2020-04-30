@@ -47,6 +47,12 @@ describe('report', () => {
     })
 
   describe('combinations', () => {
-    
-  } )
+    test('Green, Red', () => {
+      expect(report("Green, Red")).toEqual("Green: 1\nRed: 1");
+    })
+
+    test('Amber, Red, Green, Red', () => {
+      expect(report('Amber, Red, Green, Red')).toEqual("Green: 1\nAmber: 1\nRed: 2");
+    })
+  })
 })
