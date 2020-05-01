@@ -55,4 +55,17 @@ describe('report', () => {
       expect(report('Amber, red, Green, Red')).toEqual("Green: 1\nAmber: 1\nRed: 2");
     })
   })
+
+  describe('edge cases', () => {
+    describe('upper and lower cases', () => {
+      test('amber, Red, gReEn, RED', () => {
+        expect(report('amber, Red, gReEn, RED')).toEqual("Green: 1\nAmber: 1\nRed: 2");
+      })
+    })
+    describe('different spacings', () => {
+      test('Amber,Red ,   Green, Red  ', () => {
+        expect(report('Amber,Red ,   Green, Red  ')).toEqual("Green: 1\nAmber: 1\nRed: 2");
+      })
+    })
+  })
 })
