@@ -18,8 +18,6 @@ const App = ({ anecdotes }) => {
 
   const handleVotes = () => {
     const selectedVoteCount = votes[selected] || 0
-    console.log(selectedVoteCount)
-    console.log(selected)
     setVotes({ ...votes, [selected]: selectedVoteCount + 1})
     if (!votes[mostVotes] || selectedVoteCount + 1 > votes[mostVotes]) {
       setMostVotes(selected)
