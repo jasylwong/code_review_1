@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import Header from './components/Header';
+import Button from './components/Button';
 import Statistics from './components/Statistics';
 
 const App = () => {
@@ -24,11 +25,11 @@ const App = () => {
 
   return (
     <div>
-      <Header content={'give feedback'} />
-      <button onClick={handleGoodClick}>good</button>
-      <button onClick={handleNeutralClick}>neutral</button>
-      <button onClick={handleBadClick}>bad</button>
-      <Header content={'statistics'} />
+      <Header content="give feedback" />
+      <Button onClick={handleGoodClick} content="good" />
+      <Button onClick={handleNeutralClick} content="neutral" />
+      <Button onClick={handleBadClick} content="bad" />
+      <Header content="statistics" />
       {all === 0 ? <p>No feedback given</p> : <Statistics scores={scores} />}
     </div>
   )
