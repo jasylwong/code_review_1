@@ -1,8 +1,7 @@
 import React from 'react';
 
 const Statistics = ({ scores }) => {
-  const {good, neutral, bad} = scores
-  let all = good + neutral + bad
+  const {good, neutral, bad, all} = scores
   let average = (1 * good + -1 * bad) / all || 0
   let positive = good / all || 0
 
