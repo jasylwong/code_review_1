@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
+import Header from './components/Header';
 
 const App = ({ anecdotes }) => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 })
+  let mostVotes = Object.keys(votes).reduce((a, b) => votes[a] > votes[b] ? a : b)
   
   const handleClick = () => {
     const newSelected = Math.floor(Math.random() * anecdotes.length)
@@ -18,13 +20,15 @@ const App = ({ anecdotes }) => {
 
   return (
     <div>
-      <div>
-        {anecdotes[selected]}
-      </div>
+      <Header content="Anecdote of the day" />
+      <div>{anecdotes[selected]}</div>
       <div>has {votes[selected]} votes.</div>
       <br />
       <button onClick={handleVotes}>vote</button>
       <button onClick={handleClick}>next anecdote</button>
+      <Header content="Anecdote with most votes" />
+      <div>{anecdotes[mostVotes]}</div>
+      <div>has {votes[mostVotes]} votes.</div>
     </div>
   )
 }
