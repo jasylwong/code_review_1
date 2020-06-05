@@ -7,16 +7,19 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
 
   const onChange = (e) => {
-    console.log(e.target.value);
-    setNewName(e.target.value)
+      setNewName(e.target.value)
   }
 
   const onSubmit = (e) => {
     e.preventDefault()
-    const newPersons = [...persons, { name: newName}]
-    console.log(newPersons);
-    setPersons(newPersons)
-    setNewName('')
+    const names = Object.values(persons).map(person => person.name)
+    if (names.includes(newName)) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      const newPersons = [...persons, { name: newName}]
+      setPersons(newPersons)
+      setNewName('')
+    }
   }
 
   return (
