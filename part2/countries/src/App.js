@@ -22,12 +22,16 @@ function App() {
     setFilteredCountries(filtered)
   }
 
+  const showCountry = (country) => {
+    setFilteredCountries([country])
+  }
+
   const countriesToShow = filteredCountries ? filteredCountries : []
 
   return (
     <div>
       <div>find countries <input value={filter} onChange={onFilterChange} /></div>
-      <Results countries={countriesToShow}/>
+      <Results countries={countriesToShow} showCountry={showCountry} />
     </div>
   );
 }
