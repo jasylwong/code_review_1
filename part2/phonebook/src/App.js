@@ -4,14 +4,14 @@ import Notification from './components/Notification'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import './App.css'
 
 const App = () => {
   const [ persons, setPersons] = useState([])
-  const [ filteredPersons, setFilteredPersons ] = useState(null)
-  const [ newFilter, setNewFilter ] = useState('')
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
-  const [ errorMessage, setErrorMessage ] = useState(null)
+  const [ filterString, setFilterString ] = useState('')
+  const [ notification, setNotification ] = useState(null)
 
   useEffect(() => {
     personService.getAll()
@@ -20,86 +20,91 @@ const App = () => {
       })
   }, [])
 
-  const onFilterChange = (e) => {
-    setNewFilter(e.target.value)
-    const filtered = persons.filter(person => {
-      return person.name.toLowerCase().includes(e.target.value.toLowerCase())
-    })
-    setFilteredPersons(filtered)
+  const notifyWith = (message, type='success') => {
+    setNotification({ message, type })
+    setTimeout(() => {
+      setNotification(null)
+    }, 4000)
   }
 
-  const onNameChange = (e) => {
+  const handleNameChange = (e) => {
     setNewName(e.target.value)
   }
 
-  const onNumberChange = (e) => {
+  const handleNumberChange = (e) => {
     setNewNumber(e.target.value)
   }
 
-  const onSubmit = (e) => {
-    e.preventDefault()
-    const names = Object.values(persons).map(person => person.name)
-    if (names.includes(newName)) {
-      if (window.confirm(`${newName} is already added; replace the old number?`)) {
-        const currentPerson = persons.find(p => p.name === newName)
-        const updatedPerson = { ...currentPerson, number: newNumber }
-        personService.update(updatedPerson)
-          .then(response => {
-            const newPersons = persons.filter(p => p.id !== updatedPerson.id)
-            setPersons([...newPersons, updatedPerson])
-            setErrorMessage(`${newName} was updated successfully.`)
-            setTimeout(() => {
-              setErrorMessage(null)
-            }, 3000)
-          })
-      }
-    } else {
-      personService.create({ name: newName, number: newNumber })
-      .then(response => {
-        const newPersons = [...persons, { name: newName, number: newNumber }]
-        setPersons(newPersons)
-        setNewName('')
-        setNewNumber('')
-        setErrorMessage(`${newName} was added successfully.`)
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 3000)
-      })
-    }
+  const handleFilterStringChange = (e) => {
+    setFilterString(e.target.value)
   }
 
-  const handleDelete = (person) => {
+  const deletePerson = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personService.remove(person)
         .then(response => {
           const newPersons = persons.filter(p => p.id !== person.id)
           setPersons(newPersons)
-          setErrorMessage(`${person.name} was deleted successfully.`)
-          setTimeout(() => {
-            setErrorMessage(null)
-          }, 3000)
+          notifyWith(`${person.name} was deleted successfully.`)
+        })
+        .catch(() => {
+          setPersons(persons.filter(p => p.id !== person.id))
+          notifyWith(`${person.name} had already been removed`, 'error')
         })
     }
   }
 
-  const personsToShow = filteredPersons ? filteredPersons : persons
+  const addPerson = (e) => {
+    e.preventDefault()
+    const currentPerson = persons.find(p => p.name === newName)
+    if (currentPerson) {
+      if (window.confirm(`${newName} is already added; replace the old number?`)) {
+        const updatedPerson = { ...currentPerson, number: newNumber }
+        personService.update(updatedPerson)
+          .then(response => {
+            const newPersons = persons.map(p => p.id !== updatedPerson.id ? p : updatedPerson)
+            setPersons(newPersons)
+            notifyWith(`Changed number of ${currentPerson.name}`)
+            setNewName('')
+            setNewNumber('')
+          })
+      }
+    } else {
+      personService.create({ name: newName, number: newNumber })
+      .then(addedPerson => {
+        const newPersons = persons.concat(addedPerson.data)
+        setPersons(newPersons)
+        setNewName('')
+        setNewNumber('')
+        notifyWith(`Added ${newName}`)
+      })
+      .catch(error => {
+        console.log(error.response.data.error)
+        notifyWith(`${error.response.data.error} `, 'error')
+      })
+    }
+  }
+
+  const personsToShow = filterString.length === 0 ?
+    persons : 
+    persons.filter(p => p.name.toLowerCase().includes(filterString.toLowerCase()))
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={errorMessage} />
-      <Filter newFilter={newFilter} onChange={onFilterChange} />
+      <Notification notification={notification} />
+      <Filter newFilter={filterString} onChange={handleFilterStringChange} />
       <h2>Add a new contact</h2>
       <PersonForm 
-        onSubmit={onSubmit}
+        onSubmit={addPerson}
         newName={newName}
-        onNameChange={onNameChange}
+        onNameChange={handleNameChange}
         newNumber={newNumber}
-        onNumberChange={onNumberChange}
+        onNumberChange={handleNumberChange}
       />
 
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} onClick={handleDelete} />
+      <Persons persons={personsToShow} onClick={deletePerson} />
     </div>
   )
 }
