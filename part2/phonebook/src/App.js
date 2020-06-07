@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
@@ -42,10 +41,22 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     } else {
       personService.create({ name: newName, number: newNumber })
-      const newPersons = [...persons, { name: newName, number: newNumber }]
-      setPersons(newPersons)
-      setNewName('')
-      setNewNumber('')
+      .then(response => {
+        const newPersons = [...persons, { name: newName, number: newNumber }]
+        setPersons(newPersons)
+        setNewName('')
+        setNewNumber('')
+      })
+    }
+  }
+
+  const handleDelete = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.remove(person)
+        .then(response => {
+          const newPersons = persons.filter(p => p.id !== person.id)
+          setPersons(newPersons)
+        })
     }
   }
 
@@ -65,7 +76,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} onClick={handleDelete} />
     </div>
   )
 }
