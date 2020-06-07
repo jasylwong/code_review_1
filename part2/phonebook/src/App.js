@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import personService from './services/persons'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [ persons, setPersons] = useState([])
   const [ filteredPersons, setFilteredPersons ] = useState(null)
   const [ newFilter, setNewFilter ] = useState('')
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
+    personService.getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -40,7 +41,7 @@ const App = () => {
     if (names.includes(newName)) {
       alert(`${newName} is already added to phonebook`)
     } else {
-      axios.post('http://localhost:3001/persons', { name: newName, number: newNumber })
+      personService.create({ name: newName, number: newNumber })
       const newPersons = [...persons, { name: newName, number: newNumber }]
       setPersons(newPersons)
       setNewName('')
