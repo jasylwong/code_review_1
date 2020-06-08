@@ -4,7 +4,17 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan');
 
 app.use(bodyParser.json());
-app.use(morgan('tiny'));
+// app.use(morgan('tiny'));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-body'));
+
+morgan.token('post-body', function(req, res) {
+  // if (req.body !== {}) {
+  //   return `{"name": ${req.body.name}, "number": ${req.body.number}}`
+  // } else {
+  //   return ''
+  // }
+  return JSON.stringify(req.body)
+});
 
 let persons = [
   {
@@ -71,7 +81,7 @@ app.post('/api/persons', (req, res) => {
   } else if (nameExists) {
     res.status(400).send({ error: 'name must be unique' })
   } else {
-    person.id = 333
+    person.id = 334
     persons.push(person)
     res.json(req.body)
   }
