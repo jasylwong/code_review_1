@@ -57,24 +57,22 @@ app.get(`/api/persons/:id`, (req, res) => {
   if (person) {
     res.json(person)
   } else {
-    res.status(404).end()
-  }
-})
-
-app.get(`/api/persons/:id`, (req, res) => {
-  const person = persons.find(p => p.id === parseInt(req.params.id))
-  if (person) {
-    res.json(person)
-  } else {
-    res.status(404).end()
+    res.status(404).send({ error: 'person does not exist' })
   }
 })
 
 app.post('/api/persons', (req, res) => {
   const person = req.body
-  person.id = 333
-  persons.push(person)
-  res.json(req.body)
+  const nameExists = !!persons.find(p => p.name === person.name)
+  if (!person.name || !person.number || !person) {
+    res.status(400).send({ error: 'content missing' })
+  } else if (nameExists) {
+    res.status(400).send({ error: 'name must be unique' })
+  } else {
+    person.id = 333
+    persons.push(person)
+    res.json(req.body)
+  }
 })
 
 app.delete('/api/persons/:id', (req, res) => {
