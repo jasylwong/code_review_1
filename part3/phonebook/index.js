@@ -1,5 +1,8 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser')
+
+app.use(bodyParser.json());
 
 let persons = [
   {
@@ -65,6 +68,13 @@ app.get(`/api/persons/:id`, (req, res) => {
   } else {
     res.status(404).end()
   }
+})
+
+app.post('/api/persons', (req, res) => {
+  const person = req.body
+  person.id = 333
+  persons.push(person)
+  res.json(req.body)
 })
 
 app.delete('/api/persons/:id', (req, res) => {
