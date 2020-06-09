@@ -1,9 +1,11 @@
 # Full Stack Open exercises
 
-## Part 1
+## Part 1: Introduction to React
+- Course Information
+- Unicafe
+- Anecdotes
 
-
-## Part 2
+## Part 2: Communicating with server
 
 
 ## Part 3
