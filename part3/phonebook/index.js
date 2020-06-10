@@ -33,21 +33,6 @@ app.get(`/api/persons/:id`, (req, res) => {
     .catch(error => console.log(error))
 })
 
-// app.post('/api/persons', (req, res) => {
-//   const person = req.body
-//   const nameExists = !!persons.find(p => p.name === person.name)
-//   if (!person.name || !person.number || !person) {
-//     res.status(400).send({ error: 'content missing' })
-//   } else if (nameExists) {
-//     res.status(400).send({ error: 'name must be unique' })
-//   } else {
-//     person.id = 334
-//     persons.push(person)
-//     res.json(req.body)
-//   }
-// })
-
-
 app.post('/api/persons/', (req, res) => {
   const body = req.body
 
@@ -69,11 +54,13 @@ app.post('/api/persons/', (req, res) => {
     .catch(error => console.log(error))
 })
 
-// app.delete('/api/persons/:id', (req, res) => {
-//   const deletedPerson = persons.find(p => p.id === parseInt(req.params.id))
-//   persons = persons.filter(p => p.id !== deletedPerson.id)
-//   res.status(204).end()
-// })
+app.delete('/api/persons/:id', (req, res) => {
+  Person.deleteOne({ _id: req.params.id.toString() })
+    .then(person => {
+      console.log('deleted')
+    })
+  res.status(204).end()
+})
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
