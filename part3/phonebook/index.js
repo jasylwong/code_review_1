@@ -47,6 +47,28 @@ app.get(`/api/persons/:id`, (req, res) => {
 //   }
 // })
 
+
+app.post('/api/persons/', (req, res) => {
+  const body = req.body
+
+  if (!body.name) {
+    return res.status(400).json({ error: 'name missing' })
+  }
+
+  if (!body.number) {
+    return res.status(400).json({ error: 'number missing' })
+  }
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  })
+  person.save()
+    .then(savedPerson => {
+      res.json(savedPerson.toJSON())
+    })
+    .catch(error => console.log(error))
+})
+
 // app.delete('/api/persons/:id', (req, res) => {
 //   const deletedPerson = persons.find(p => p.id === parseInt(req.params.id))
 //   persons = persons.filter(p => p.id !== deletedPerson.id)
