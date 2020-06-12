@@ -37,11 +37,15 @@ app.post('/api/persons/', (req, res) => {
   const body = req.body
 
   Person.find({}).then(persons => {
-    const personsNames = persons.map(p => p.name)
+    personsNames = persons.map(p => p.name)
     if (personsNames.includes(body.name)) {
       return res.status(400).json({ error: 'name not unique' })
     }
   })
+
+  if (body.name.length < 3) {
+    return res.status(400).json({ error: 'name must be at least 3 characters' })
+  }
 
   if (!body.name) {
     return res.status(400).json({ error: 'name missing' })
