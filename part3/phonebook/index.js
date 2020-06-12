@@ -36,6 +36,13 @@ app.get(`/api/persons/:id`, (req, res, next) => {
 app.post('/api/persons/', (req, res) => {
   const body = req.body
 
+  Person.find({}).then(persons => {
+    const personsNames = persons.map(p => p.name)
+    if (personsNames.includes(body.name)) {
+      return res.status(400).json({ error: 'name not unique' })
+    }
+  })
+
   if (!body.name) {
     return res.status(400).json({ error: 'name missing' })
   }
@@ -52,6 +59,22 @@ app.post('/api/persons/', (req, res) => {
       res.json(savedPerson.toJSON())
     })
     .catch(error => console.log(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  console.log('got to finding stage')
+  const body = request.body
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    .then(updatedPerson => {
+      console.log(updatedPerson)
+      response.json(updatedPerson.toJSON())
+    })
+    .catch(error => next(error))
 })
 
 app.delete('/api/persons/:id', (req, res, next) => {
