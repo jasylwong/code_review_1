@@ -17,7 +17,7 @@ morgan.token('post-body', function(req, res) {
 app.get('/', (req, res) => {
   res.send('<h1>hello world</h1>')
 })
-
+ 
 app.get('/api/persons', (req, res) => {
   Person.find({}).then(persons => {
     res.json(persons.map(person => person.toJSON()))
