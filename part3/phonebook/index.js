@@ -35,7 +35,6 @@ app.get(`/api/persons/:id`, (req, res, next) => {
 
 app.post('/api/persons/', (req, res) => {
   const body = req.body
-
   Person.find({}).then(persons => {
     personsNames = persons.map(p => p.name)
     if (personsNames.includes(body.name)) {
