@@ -4,9 +4,10 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const Blog = require('./models/blog')
+const config = require('./utils/config')
+// const blogRouter = require('./controllers/blogs')
 
-const mongoUrl = "mongodb+srv://jasylwong:password19@cluster0-7yxwh.mongodb.net/blog?retryWrites=true&w=majority"
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.use(cors())
 app.use(express.json())
@@ -33,7 +34,7 @@ app.post('/api/blogs', (request, response) => {
     })
 })
 
-const PORT = 3003
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+// const PORT = 3003
+app.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`)
 })
