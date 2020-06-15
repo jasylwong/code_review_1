@@ -1,6 +1,7 @@
 // Example of really basic node.js app which uses MongoDB
+// Add nodemon for continuous refreshing of server
 
-const http = require('http')
+const http = require('http') 
 const express = require('express')
 const app = express()
 const cors = require('cors')
