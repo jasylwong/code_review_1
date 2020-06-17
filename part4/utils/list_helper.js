@@ -93,5 +93,5 @@ const blogCountByName = (names, name) => {
   return names.filter(n => n == name).length
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs } 
 
