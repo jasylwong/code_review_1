@@ -86,7 +86,7 @@ describe('totalLikes', () => {
 })
 
 describe('favoriteBlog', () => {
-  test('of empty list is nil', () => {
+  test('of empty list is null', () => {
     const result = list_helper.favoriteBlog([])
     expect(result).toEqual(null)
   })
@@ -106,6 +106,28 @@ describe('favoriteBlog', () => {
       url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
       likes: 12,
       __v: 0
+    }
+    expect(received).toEqual(expected)
+  })
+})
+
+describe('mostBlogs', () => {
+  test('of empty list is null', () => {
+    const result = list_helper.mostBlogs([])
+    expect(result).toEqual(null)
+  })
+
+  test('when list has only one blog returns that author', () => {
+    const received = list_helper.mostBlogs(listWithOneBlog)
+    const expected = { author: 'Edsger W. Dijkstra', blogs: 1 }
+    expect(received).toEqual(expected)
+  })
+
+  test('of a blogger list is assessed right', () => {
+    const received = list_helper.mostBlogs(blogs)
+    const expected =   {
+      author: "Robert C. Martin",
+      blogs: 3
     }
     expect(received).toEqual(expected)
   })
