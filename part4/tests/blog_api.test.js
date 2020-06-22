@@ -56,6 +56,7 @@ test('a valid blog can be added', async () => {
 test('likes defaults to 0 if not given on blog creation', async () => {
   const newBlog = {
     _id: '5a422aa71b54a676234d28f7',
+    url: 'http://www.someurl.html',
     title: 'Testing default likes value'
   }
 
@@ -63,6 +64,21 @@ test('likes defaults to 0 if not given on blog creation', async () => {
 
   const latestBlog = await Blog.findById('5a422aa71b54a676234d28f7')
   expect(latestBlog.likes).toEqual(0)
+})
+
+test('missing title and url properties returns 400 bad request', async () => {
+  const invalidBlog = {
+    _id: "5a422aa71b54a676234d17f9",
+    author: "Nobody",
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(invalidBlog)
+    .expect(400)
+
+  const invalidBlogSearch = await Blog.findById("5a422aa71b54a676234d17f9")
+  expect(invalidBlogSearch).toEqual(null)
 })
 
 afterAll(() => {
