@@ -1,9 +1,9 @@
-const Blog = require("../models/blog")
 const mongoose = require('mongoose')
 const supertest = require("supertest")
 const helper = require('./test_helper')
 const app = require("../app")
 const api = supertest(app)
+const Blog = require("../models/blog")
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -46,11 +46,11 @@ test('a valid blog can be added', async () => {
     .send(newBlog)
     .expect(201)
   
-  const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
-  const content = response.body.map(blog => blog.title)
-  expect(content).toContain(newBlog.title)
+  const contents = blogsAtEnd.map(blog => blog.title)
+  expect(contents).toContain(newBlog.title)
 })
 
 test('likes defaults to 0 if not given on blog creation', async () => {
@@ -62,7 +62,7 @@ test('likes defaults to 0 if not given on blog creation', async () => {
 
   await api.post('/api/blogs').send(newBlog)
 
-  const latestBlog = await Blog.findById('5a422aa71b54a676234d28f7')
+  const latestBlog = await Blog.findById(newBlog._id)
   expect(latestBlog.likes).toEqual(0)
 })
 
