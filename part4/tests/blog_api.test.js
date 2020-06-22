@@ -53,6 +53,18 @@ test('a valid blog can be added', async () => {
   expect(content).toContain(newBlog.title)
 })
 
+test('likes defaults to 0 if not given on blog creation', async () => {
+  const newBlog = {
+    _id: '5a422aa71b54a676234d28f7',
+    title: 'Testing default likes value'
+  }
+
+  await api.post('/api/blogs').send(newBlog)
+
+  const latestBlog = await Blog.findById('5a422aa71b54a676234d28f7')
+  expect(latestBlog.likes).toEqual(0)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
