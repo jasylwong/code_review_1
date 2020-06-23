@@ -81,6 +81,15 @@ test('missing title and url properties returns 400 bad request', async () => {
   expect(invalidBlogSearch).toEqual(null)
 })
 
+test('deleting a blog', async () => {
+  const blogsAtStart = await helper.blogsInDb()
+  const blogToDelete = blogsAtStart[0]
+
+  await api
+    .delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
