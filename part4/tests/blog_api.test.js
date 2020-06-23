@@ -4,6 +4,8 @@ const helper = require('./test_helper')
 const app = require("../app")
 const api = supertest(app)
 const Blog = require("../models/blog")
+const { update } = require('../models/blog')
+const { notify } = require('../app')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -32,7 +34,7 @@ test('unique identifier property of blogs is named id', async () => {
 })
 
 test('a valid blog can be added', async () => {
-  const newBlog =   {
+  const newBlog = {
     id: "5a422aa71b54a676234d17f9",
     title: "Testing valid blog can be added",
     author: "Jason Wong",
@@ -45,7 +47,7 @@ test('a valid blog can be added', async () => {
     .post('/api/blogs')
     .send(newBlog)
     .expect(201)
-  
+
   const blogsAtEnd = await helper.blogsInDb()
   expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
 
@@ -81,13 +83,38 @@ test('missing title and url properties returns 400 bad request', async () => {
   expect(invalidBlogSearch).toEqual(null)
 })
 
-test('deleting a blog', async () => {
-  const blogsAtStart = await helper.blogsInDb()
-  const blogToDelete = blogsAtStart[0]
+describe('deletion of a blog', () => {
+  test('deleting a blog', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
 
-  await api
-    .delete(`/api/blogs/${blogToDelete.id}`)
-    .expect(204)
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+  })
+})
+
+describe('updating of a blog', () => {
+  test.only('succeeds with a valid updated blog', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const updatedLikes = blogToUpdate.likes + 1
+
+    const updatedBlog = {
+      ...blogToUpdate, likes: updatedLikes
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+    
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+
+    expect(blogsAtEnd[0].likes).toEqual(updatedLikes)
+    console.log(blogsAtEnd)
+  })
 })
 
 afterAll(() => {
