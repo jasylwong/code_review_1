@@ -24,8 +24,6 @@ blogRouter.delete('/:id', async (request, response) => {
 blogRouter.put('/:id', async (request, response) => {
   const body = request.body
 
-  console.log(body)
-
   const updatedBlog = {
     title: body.title,
     author: body.author,

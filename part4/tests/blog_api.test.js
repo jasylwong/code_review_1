@@ -95,7 +95,7 @@ describe('deletion of a blog', () => {
 })
 
 describe('updating of a blog', () => {
-  test.only('succeeds with a valid updated blog', async () => {
+  test('succeeds with a valid updated blog', async () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
     const updatedLikes = blogToUpdate.likes + 1
@@ -113,7 +113,6 @@ describe('updating of a blog', () => {
     expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
 
     expect(blogsAtEnd[0].likes).toEqual(updatedLikes)
-    console.log(blogsAtEnd)
   })
 })
 
