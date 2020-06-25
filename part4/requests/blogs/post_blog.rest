@@ -3,7 +3,7 @@ content-type: application/json
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImdhcnkiLCJpZCI6IjVlZjRmMTliZWQ1MGE4MWFjNGZmYjAwYyIsImlhdCI6MTU5MzExMTc1M30.DDP-9S1wNoMb-0fl0zcZsYgPFDfb4I4xZE1R58ZE5-Q
 
 {
-  "title": "Testing token middleware",
+  "title": "Testing deleting notes",
   "author": "JW",
   "url": "j.com",
   "likes": 4

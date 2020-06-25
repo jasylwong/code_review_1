@@ -4,8 +4,13 @@ const helper = require('./test_helper')
 const app = require("../app")
 const api = supertest(app)
 const Blog = require("../models/blog")
+const User = require("../models/user")
+const bcrypt = require("bcrypt")
 const { update } = require('../models/blog')
 const { notify } = require('../app')
+const jwt = require('jsonwebtoken')
+
+let token
 
 beforeEach(async () => {
   await Blog.deleteMany({})
@@ -13,6 +18,12 @@ beforeEach(async () => {
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
+
+  await User.deleteMany()
+  const passwordHash = await bcrypt.hash('secret', 10)
+  const user = new User({ username: 'root', passwordHash })
+  await user.save()
+  token = jwt.sign(user.toJSON(), process.env.SECRET)
 })
 
 test('blogs are returned as JSON', async () => {
@@ -36,7 +47,7 @@ test('unique identifier property of blogs is named id', async () => {
 test('a valid blog can be added', async () => {
   const newBlog = {
     id: "5a422aa71b54a676234d17f9",
-    title: "Testing valid blog can be added",
+    title: "Testing valid blog can be added with token",
     author: "Jason Wong",
     url: "http://www.testingvalidblogcanbeadded.html",
     likes: 5,
@@ -45,6 +56,7 @@ test('a valid blog can be added', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(newBlog)
     .expect(201)
 
@@ -62,9 +74,13 @@ test('likes defaults to 0 if not given on blog creation', async () => {
     title: 'Testing default likes value'
   }
 
-  await api.post('/api/blogs').send(newBlog)
-
-  const latestBlog = await Blog.findById(newBlog.__id)
+  await api
+    .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
+    .send(newBlog)
+    .expect(201)
+    
+  const latestBlog = await Blog.findById(newBlog._id)
   expect(latestBlog.likes).toEqual(0)
 })
 
@@ -79,18 +95,35 @@ test('missing title and url properties returns 400 bad request', async () => {
     .send(invalidBlog)
     .expect(400)
 
-  const invalidBlogSearch = await Blog.findById("5a422aa71b54a676234d17f9")
+  const invalidBlogSearch = await Blog.findById(invalidBlog._id)
   expect(invalidBlogSearch).toEqual(null)
 })
 
 describe('deletion of a blog', () => {
   test('deleting a blog', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
+    
+    const newBlog = {
+      _id: "5a422aa71b54a676234d17f9",
+      author: "Who cares",
+      title: "Whatever",
+      url: "whatever.com"
+    }
+  
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
+      .send(newBlog)
 
+    const blogToDelete = await Blog.findById(newBlog._id)
+    
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
   })
 })
 
