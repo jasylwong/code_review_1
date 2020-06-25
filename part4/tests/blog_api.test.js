@@ -64,7 +64,7 @@ test('likes defaults to 0 if not given on blog creation', async () => {
 
   await api.post('/api/blogs').send(newBlog)
 
-  const latestBlog = await Blog.findById(newBlog._id)
+  const latestBlog = await Blog.findById(newBlog.__id)
   expect(latestBlog.likes).toEqual(0)
 })
 
