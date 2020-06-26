@@ -92,6 +92,7 @@ test('missing title and url properties returns 400 bad request', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `bearer ${token}`)
     .send(invalidBlog)
     .expect(400)
 
