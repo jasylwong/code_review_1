@@ -1,23 +1,17 @@
-const bcrypt = require('bcrypt')
-const mongoose = require('mongoose')
 const supertest = require('supertest')
+const mongoose = require('mongoose')
 const helper = require('./test_helper')
 const app = require('../app')
 const api = supertest(app)
 
 const User = require('../models/user')
 
-describe('when there is initially one user in db', () => {
-  beforeEach(async () => {
-    await User.deleteMany()
+beforeEach(async () => {
+  await User.deleteMany()
+})
 
-    const passwordHash = await bcrypt.hash('secret', 10)
-    const user = new User({ username: 'root', passwordHash })
-
-    await user.save()
-  })
-
-  test.only('creation succeeds with a fresh username', async () => {
+describe('creation of a user', () => {
+  test('succeeds with a fresh username', async () => {
     const usersAtStart = await helper.usersInDb()
 
     const newUser = {
@@ -37,6 +31,42 @@ describe('when there is initially one user in db', () => {
 
     const usernames = usersAtEnd.map(user => user.username)
     expect(usernames).toContain(newUser.username)
+  })
+
+  test('creation fails with proper statuscode and message if username already taken', async () => {
+    const newUser = {
+      username: 'johndoe',
+      name: 'John Doe',
+      password: 'sekred',
+    }
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('`username` to be unique')
+  })
+
+  test('creation fails with proper statuscode and message if password too short', async () => {
+    const newUser = {
+      username: 'janedoe',
+      name: 'Jane Doe',
+      password: 'p',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('password must min length 3')
   })
 })
 

@@ -3,10 +3,6 @@ const mongoose = require('mongoose')
 const helper = require('./test_helper')
 const app = require("../app")
 const api = supertest(app)
-// 
-const bcrypt = require("bcrypt")
-const jwt = require('jsonwebtoken')
-// 
 
 const Blog = require("../models/blog")
 const User = require("../models/user")
@@ -18,13 +14,6 @@ beforeEach(async () => {
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
-
-  // 
-  // const passwordHash = await bcrypt.hash('secret', 10)
-  
-  // await user.save()
-  // token = jwt.sign(user.toJSON(), process.env.SECRET)
-  // 
 })
 
 describe('when some blogs are saved', () => {
