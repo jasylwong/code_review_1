@@ -24,6 +24,11 @@ const App = () => {
       const user = await loginService.login({
         username, password
       })
+
+      window.localStorage.setItem(
+        'loggedNoteAppUser', JSON.stringify(user)
+      )
+
       setUser(user)
       setUsername('')
       setPassword('')
