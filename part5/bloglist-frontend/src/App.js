@@ -70,10 +70,18 @@ const App = () => {
     )
   }
 
+  const logout = () => {
+    setUser(null)
+    window.localStorage.removeItem('loggedNoteAppUser')
+  }
+
   return (
     <div>
       <h2>blogs</h2>
       <Notification message={errorMessage} />
+      <div>{user.username} logged in</div>
+      <button onClick={logout}>logout</button>
+      <br />
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
