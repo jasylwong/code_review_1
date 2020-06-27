@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -58,8 +59,11 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogAppUser')
   }
 
+  const blogFormRef = useRef()
+
   const addBlog = async (event) => {
     event.preventDefault()
+    blogFormRef.current.toggleVisibility()
     const blogObject = {
       title, author, url
     }
@@ -119,38 +123,39 @@ const App = () => {
       <Notification message={errorMessage} />
       <div>{user.username} logged in</div>
       <button onClick={logout}>logout</button>
-      <br />
-      <h3>create new</h3>
-      <form onSubmit={addBlog}>
-        <div>
-          title:
+      <br /><br />
+      <Togglable buttonLabel='new note' ref={blogFormRef}>
+        <form onSubmit={addBlog}>
+          <div>
+            title:
               <input
-            type="text"
-            value={title}
-            name="Title"
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </div>
-        <div>
-          author
+              type="text"
+              value={title}
+              name="Title"
+              onChange={({ target }) => setTitle(target.value)}
+            />
+          </div>
+          <div>
+            author
               <input
-            type="text"
-            value={author}
-            name="Author"
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </div>
-        <div>
-          url
+              type="text"
+              value={author}
+              name="Author"
+              onChange={({ target }) => setAuthor(target.value)}
+            />
+          </div>
+          <div>
+            url
               <input
-            type="text"
-            value={url}
-            name="Url"
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
+              type="text"
+              value={url}
+              name="Url"
+              onChange={({ target }) => setUrl(target.value)}
+            />
+          </div>
+          <button type="submit">create</button>
+        </form>
+      </Togglable>
       <h3>current blogs</h3>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
