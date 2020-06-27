@@ -7,6 +7,7 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+  const [confirmationMessage, setConfirmationMessage] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -52,6 +53,36 @@ const App = () => {
     }
   }
 
+  const logout = () => {
+    setUser(null)
+    window.localStorage.removeItem('loggedBlogAppUser')
+  }
+
+  const addBlog = async (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title, author, url
+    }
+
+    blogService.create(blogObject)
+      .then(returnedBlog => {
+        setBlogs([...blogs, returnedBlog])
+        setConfirmationMessage(`a new blog "${title}" by ${author} added`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+      })
+      .catch(error => {
+        setErrorMessage('Blog creation failed')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
+  }
+
   if (user === null) {
     return (
       <div>
@@ -80,26 +111,6 @@ const App = () => {
         </form>
       </div>
     )
-  }
-
-  const logout = () => {
-    setUser(null)
-    window.localStorage.removeItem('loggedNoteAppUser')
-  }
-
-  const addBlog = async (event) => {
-    event.preventDefault()
-    const blogObject = {
-      title, author, url
-    }
-
-    blogService.create(blogObject)
-      .then(returnedBlog => {
-        setBlogs([...blogs, returnedBlog])
-        setTitle('')
-        setAuthor('')
-        setUrl('')
-      })
   }
 
   return (
