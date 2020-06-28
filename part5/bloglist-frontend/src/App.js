@@ -22,7 +22,6 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    console.log(loggedUserJSON)
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
@@ -78,6 +77,20 @@ const App = () => {
       })
   }
 
+  const addLike = (id) => {
+    const blog = blogs.find(b => b.id === id)
+    const likedBlog = {
+      ...blog, likes: blog.likes + 1, user: blog.user.id
+    }
+    blogService.update(id, likedBlog)
+      .then(returnedBlog => {
+        setBlogs(blogs.map(b => id === b.id? returnedBlog : b))
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
   if (user === null) {
     return (
       <div>
@@ -121,7 +134,7 @@ const App = () => {
       </Togglable>
       <h3>current blogs</h3>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} addLike={() => addLike(blog.id)}/>
       )}
     </div>
   )

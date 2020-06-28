@@ -18,10 +18,19 @@ const create = async (newObject) => {
   }
 
   const response = await axios.post(baseUrl, newObject, config)
-  // const response = await axios.post(baseUrl, newObject)
   console.log(response);
   
   return response.data
 }
 
-export default { getAll, create, setToken }
+const update = (id, newObject) => {
+  console.log('request: ');
+  
+  console.log(id, newObject);
+  
+  const request = axios.put(`${baseUrl}/${id}`, newObject)
+  console.log(request)
+  return request.then(response => response.data)
+}
+
+export default { getAll, create, setToken, update }
