@@ -66,7 +66,7 @@ const App = () => {
         setBlogs([...blogs, returnedBlog])
         setConfirmationMessage(`a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
         setTimeout(() => {
-          setErrorMessage(null)
+          setConfirmationMessage(null)
         }, 5000)
       })
       .catch(error => {
@@ -85,6 +85,18 @@ const App = () => {
     blogService.update(id, likedBlog)
       .then(returnedBlog => {
         setBlogs(blogs.map(b => id === b.id? returnedBlog : b))
+      })
+      .catch(error => {
+        console.log(error);
+      })
+  }
+
+  const deleteBlog = (id) => {
+    const blog = blogs.find(b => b.id === id)
+
+    blogService.remove(id)
+      .then(response => {
+        setBlogs(blogs.filter(b => b.id !== blog.id))
       })
       .catch(error => {
         console.log(error);
@@ -136,7 +148,7 @@ const App = () => {
       </Togglable>
       <h3>current blogs</h3>
       {blogsSorted.map(blog =>
-        <Blog key={blog.id} blog={blog} addLike={() => addLike(blog.id)}/>
+        <Blog key={blog.id} blog={blog} addLike={() => addLike(blog.id)} deleteBlog={() => deleteBlog(blog.id)} />
       )}
     </div>
   )

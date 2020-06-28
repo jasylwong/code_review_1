@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Blog = ({ blog, addLike }) => {
+const Blog = ({ blog, addLike, deleteBlog }) => {
   const blogStyle = {
     border: 'solid black 2px',
     padding: '3px',
@@ -9,8 +9,12 @@ const Blog = ({ blog, addLike }) => {
 
   return (
     <div style={blogStyle}>
-      <div>"{blog.title}" by {blog.author}</div>
-      <div>likes: {blog.likes}</div><button onClick={addLike}>like</button>
+      <div><strong>Title: </strong>{blog.title}</div>
+      <div><strong>Author: </strong> {blog.author}</div>
+      <div><strong>URL: </strong><a href="https://www.bbc.co.uk/news">url</a></div>
+      <div><strong>User: </strong>{blog.user.name}</div>
+      <div><strong>Likes: </strong>{blog.likes}</div><button onClick={addLike}>like</button>
+      <button onClick={deleteBlog}>delete</button>
     </div>
   )
 }
