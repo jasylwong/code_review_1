@@ -70,6 +70,7 @@ const App = () => {
         }, 5000)
       })
       .catch(error => {
+        console.log(error)
         setErrorMessage('Blog creation failed')
         setTimeout(() => {
           setErrorMessage(null)
@@ -87,7 +88,7 @@ const App = () => {
         setBlogs(blogs.map(b => id === b.id? returnedBlog : b))
       })
       .catch(error => {
-        console.log(error);
+        console.log(error)
       })
   }
 
@@ -96,10 +97,11 @@ const App = () => {
 
     blogService.remove(id)
       .then(response => {
+        console.log(response)
         setBlogs(blogs.filter(b => b.id !== blog.id))
       })
       .catch(error => {
-        console.log(error);
+        console.log(error)
       })
   }
 
@@ -113,7 +115,7 @@ const App = () => {
         <form onSubmit={handleLogin}>
           <div>
             username
-              <input
+            <input
               type="text"
               value={username}
               name="Username"
@@ -122,7 +124,7 @@ const App = () => {
           </div>
           <div>
             password
-              <input
+            <input
               type="password"
               value={password}
               name="Password"
