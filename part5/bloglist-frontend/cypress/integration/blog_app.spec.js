@@ -11,10 +11,25 @@ describe('Blog app', function() {
   })
 
   it('login form is shown', function() {
-    cy.contains('login').click()
-    cy.get('#username').type('james_dean')
-    cy.get('#password').type('testPassword')
-    cy.get('#login-button').click()
-    cy.contains('james_dean logged in')
+    cy.contains('username')
+    cy.contains('password')
+  })
+
+  describe('Login', function() {
+    it('succeeds with correct credentials', function() {
+      cy.contains('login').click()
+      cy.get('#username').type('james_dean')
+      cy.get('#password').type('testPassword')
+      cy.get('#login-button').click()
+      cy.contains('james_dean logged in')
+    })
+
+    it('fails with incorrect credentials', function() {
+      cy.contains('login').click()
+      cy.get('#username').type('wrong_guy')
+      cy.get('#password').type('testPassword')
+      cy.get('#login-button').click()
+      cy.contains('Wrong credentials')
+    })
   })
 })
