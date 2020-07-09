@@ -63,6 +63,11 @@ describe('Blog app', function() {
         cy.contains('like').click()
         cy.contains('Likes: 1')
       })
+
+      it('can be deleted', function() {
+        cy.contains('delete').click()
+        cy.contains('www.urlName.com').should('not.exist')
+      })
     })
   })
 })
