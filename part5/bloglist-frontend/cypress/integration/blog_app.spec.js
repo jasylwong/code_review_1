@@ -33,7 +33,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.contains('login').click()
       cy.get('#username').type('james_dean')
@@ -48,6 +48,21 @@ describe('Blog app', function() {
       cy.get('#url').type('www.urlName.com')
       cy.get('#submit-new-blog').click()
       cy.contains('a new blog "This is the title" by Arthur Freely added')
+    })
+
+    describe.only('and a blog exists', function() {
+      beforeEach(function() {
+        cy.contains('new blog').click()
+        cy.get('#title').type('This is the title')
+        cy.get('#author').type('Arthur Freely')
+        cy.get('#url').type('www.urlName.com')
+        cy.get('#submit-new-blog').click()
+      })
+
+      it('can be liked', function() {
+        cy.contains('like').click()
+        cy.contains('Likes: 1')
+      })
     })
   })
 })
