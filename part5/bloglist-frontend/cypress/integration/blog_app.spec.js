@@ -50,7 +50,7 @@ describe('Blog app', function() {
       cy.contains('a new blog "This is the title" by Arthur Freely added')
     })
 
-    describe.only('and a blog exists', function() {
+    describe('and a blog exists', function() {
       beforeEach(function() {
         cy.contains('new blog').click()
         cy.get('#title').type('This is the title')
@@ -67,6 +67,31 @@ describe('Blog app', function() {
       it('can be deleted', function() {
         cy.contains('delete').click()
         cy.contains('www.urlName.com').should('not.exist')
+      })
+    })
+
+    describe.only('and multiple blogs exist', function() {
+      beforeEach(function() {
+        cy.contains('new blog').click()
+        cy.get('#title').type('First title')
+        cy.get('#author').type('First author')
+        cy.get('#url').type('www.firstUrl.com')
+        cy.get('#submit-new-blog').click()
+        cy.contains('new blog').click()
+        cy.get('#title').type('Second title')
+        cy.get('#author').type('Second author')
+        cy.get('#url').type('www.SecondUrl.com')
+        cy.get('#submit-new-blog').click()
+      })
+
+      it('blogs are listed in order of likes', function() {
+        cy.get('.like-btn').first().click()
+        cy.get('.like-btn').last().click()
+        cy.get('.like-btn').last().click()
+        cy.get('.likes').then(num => {
+          cy.wrap(num).eq(0).contains('Likes: 2')
+          cy.wrap(num).eq(1).contains('Likes: 1')
+        })
       })
     })
   })
