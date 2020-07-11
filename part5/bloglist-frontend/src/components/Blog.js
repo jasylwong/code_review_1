@@ -8,7 +8,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className="blog">
       <div className="title"><strong>Title: </strong>{blog.title}</div>
       <div className="author"><strong>Author: </strong> {blog.author}</div>
       <div><strong>URL: </strong><a href="https://www.bbc.co.uk/news">{blog.url}</a></div>
