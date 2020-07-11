@@ -127,7 +127,12 @@ describe('Blog app', function () {
       })
     })
 
-    // it('the creator can delete a blog', function() {
+    it('the creator can delete a blog', function() {
+      cy.get('@blog3').contains('delete').click()
+      cy.should('not.contain', 'Test title 3')
+    })
+
+    // it('blogs can not be deleted by non-creator', function() {
 
     // })
   })
