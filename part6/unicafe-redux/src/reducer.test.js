@@ -62,4 +62,24 @@ describe('unicafe reducer', () => {
       bad: 0
     })
   })
+
+  test('reset is incremented', () => {
+    const state = {
+      good: 5,
+      ok: 4,
+      bad: 2
+    }
+
+    const action = {
+      type: 'ZERO'
+    }
+
+    deepFreeze(state)
+    const newState = counterReducer(state, action)
+    expect(newState).toEqual({
+      good: 0,
+      ok: 0,
+      bad: 0
+    })
+  })
 })
