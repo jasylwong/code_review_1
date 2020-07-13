@@ -18,14 +18,20 @@ const App = () => {
     })
   }
 
+  const neutral = () => {
+    store.dispatch({
+      type: 'OK'
+    })
+  }
+
   return (
     <div>
       <button onClick={good}>good</button> 
-      <button>neutral</button> 
+      <button onClick={neutral}>neutral</button> 
       <button onClick={bad}>bad</button>
       <button>reset stats</button>
       <div>good {store.getState().good}</div>
-      <div>neutral</div>
+      <div>neutral {store.getState().ok}</div>
       <div>bad {store.getState().bad}</div>
     </div>
   )
