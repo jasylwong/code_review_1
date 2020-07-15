@@ -42,5 +42,18 @@ export const vote = (id) => {
   }
 }
 
+const generateId = () =>
+Number((Math.random() * 1000000).toFixed(0))
+
+export const createAnecdote = (content) => {
+  return {
+    type: "ADD_ANECDOTE",
+    data: {
+      id: generateId(),
+      content: content,
+      votes: 0
+    }
+  }
+}
 
 export default reducer
