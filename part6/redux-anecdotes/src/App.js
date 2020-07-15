@@ -29,10 +29,14 @@ const App = () => {
     })
   }
 
+  const orderedAnecdotes = () => {
+    return anecdotes.sort(function(a, b) {return b.votes - a.votes})
+  }
+
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {orderedAnecdotes().map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
