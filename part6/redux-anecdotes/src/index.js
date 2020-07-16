@@ -1,11 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore } from 'redux'
+import { createStore, combineReducers } from 'redux'
+import { composeWithDevTools } from 'redux-devtools-extension'
 import { Provider } from 'react-redux'
 import App from './App'
-import reducer from './reducers/anecdoteReducer'
 
-const store = createStore(reducer)
+import anecdoteReducer from './reducers/anecdoteReducer'
+import notificationReducer from './reducers/notificationReducer'
+
+const reducer = combineReducers({
+  anecdotes: anecdoteReducer,
+  notification: notificationReducer
+})
+
+const store = createStore(
+  reducer,
+  composeWithDevTools()
+)
 
 ReactDOM.render(
   <Provider store={store}>
