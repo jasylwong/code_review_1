@@ -16,8 +16,8 @@ const AnecdoteList = () => {
     return filteredAnecdotes.sort(function(a, b) {return b.votes - a.votes})
   }
 
-  const handleVote = (anecdote) => {
-    dispatch(vote(anecdote.id))
+  const handleVote = async (anecdote) => {
+    dispatch(vote(anecdote))
     dispatch(setNotification(anecdote.content))
     setTimeout(() => dispatch(clearNotification()), 5000)
   }

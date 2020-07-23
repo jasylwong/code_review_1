@@ -13,7 +13,13 @@ const createNew = async (content) => {
   return response.data
 }
 
+const vote = async (votedAnecdote) => {
+  const updatedAnecdote = { ...votedAnecdote, votes: votedAnecdote.votes + 1 }
+  const request = axios.put(`${baseUrl}/${votedAnecdote.id}`, updatedAnecdote)
+  return request.then(response => response.data)
+}
+
 const generateId = () =>
   Number((Math.random() * 1000000).toFixed(0))
 
-export default { getAll, createNew }
+export default { getAll, createNew, vote }
