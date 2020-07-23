@@ -34,6 +34,11 @@
       "content": "hello",
       "votes": 0,
       "id": 501277
+    },
+    {
+      "content": "testing redux-thunk",
+      "votes": 0,
+      "id": 756447
     }
   ]
 }
