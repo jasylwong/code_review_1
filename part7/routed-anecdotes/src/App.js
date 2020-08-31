@@ -25,6 +25,7 @@ const Anecdote = ({ anecdote }) => {
   return (
     <div>
       <h1>{anecdote.content}</h1>
+      <p>by {anecdote.author}</p>
       <p>has {anecdote.votes} votes</p>
       <p>
         for more info see <a href={anecdote.info}>{anecdote.info}</a>
@@ -57,9 +58,9 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const history = useHistory()
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('url')
+  const [content, setContent] = useField('text')
+  const [author, setAuthor] = useField('text')
+  const [info, setInfo] = useField('url')
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -73,26 +74,31 @@ const CreateNew = (props) => {
     props.addNotification(content.value)
   }
 
+  const reset = () => {
+    setContent('')
+    setAuthor('')
+    setInfo('')
+    console.log('Reset');
+  }
+
   return (
     <div>
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
           content
-          {/* <input name='content' value={content} onChange={(e) => setContent(e.target.value)} /> */}
           <input {...content} />
         </div>
         <div>
           author
-          {/* <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} /> */}
           <input {...author} />
         </div>
         <div>
           url for more info
-          {/* <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} /> */}
           <input {...info} />
         </div>
-        <button>create</button>
+        <input type="submit" value="create" />
+        <input type="button" onClick={reset} value="reset" />
       </form>
     </div>
   )
